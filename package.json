@@ -1,0 +1,12 @@
+{
+  "name": "smart-contracts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/decentralised-university/smart-contracts.git",
+  "author": "cameronmcewan <cm17521@bristol.ac.uk>",
+  "license": "MIT",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.7.3",
+    "hardhat": "^2.11.2"
+  }
+}
