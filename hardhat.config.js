@@ -3,6 +3,8 @@ require("@nomicfoundation/hardhat-toolbox");
 const dotenv = require("dotenv");
 require("./tasks/block-number")
 require("./tasks/accounts")
+require("./tasks/balance")
+require("@unlock-protocol/hardhat-plugin");
 
 dotenv.config();
 
