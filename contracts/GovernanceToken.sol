@@ -6,16 +6,11 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 contract GovernanceToken is ERC20Votes {
     uint256 public s_maxSupply = 1000000000000000000000000; // 1 million
 
-    constructor() 
-        ERC20("GovernanceToken", "GT")
-        ERC20Permit("GovernorToken")
-    {
+    constructor() ERC20("GovernanceToken", "GT") ERC20Permit("GovernorToken") {
         _mint(msg.sender, s_maxSupply);
     }
 
-
 // The functiosn below are overrides required by Solidity
-
 
   function _afterTokenTransfer(
     address from,
