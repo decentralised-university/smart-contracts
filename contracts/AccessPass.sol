@@ -21,6 +21,8 @@ contract AccessPass is ERC721, Ownable {
     }
 
     function setMaxSupply(uint256 maxSupply_) external onlyOwner {
+        require(totalSupply < maxSupply_, 'Max supply cannot be less than current total supply.');
+
         maxSupply = maxSupply_;
     } 
 
