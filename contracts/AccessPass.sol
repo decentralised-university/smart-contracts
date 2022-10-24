@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract AccessPass is ERC721, Ownable {
-    uint256 public mintPrice = 0.05 ether;  
+    uint256 public mintPrice = 0.01 ether;  
     uint256 public totalSupply;
     uint256 public maxSupply;
     bool public isMintEnabled;
