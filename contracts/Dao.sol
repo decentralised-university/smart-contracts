@@ -98,7 +98,6 @@ contract Dao {
         p.voteStatus[msg.sender] = true;
 
         emit newVote(p.votesUp, p.votesDown, msg.sender, _id, _vote);
-        
     }
 
     function countVotes(uint256 _id) public {
