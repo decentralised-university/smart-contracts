@@ -15,7 +15,7 @@ contract Dao {
     constructor(){
         owner = msg.sender;
         nextProposal = 1;
-        daoContract = IdaoContract(0xd9145CCE52D386f254917e481eB44e9943F39138);
+        daoContract = IdaoContract(0x6d818827046A47db24E08d0E7799E21E384901c4);
     }
 
     struct proposal{

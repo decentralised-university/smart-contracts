@@ -8,7 +8,7 @@ contract DUPoints is ERC20 {
     mapping (address => uint) public claimedWallets;
     uint256 public _totalSupply;
     uint256 public maxSupply;
-    address public accessPass = 0xd9145CCE52D386f254917e481eB44e9943F39138;
+    address public accessPass = 0x6d818827046A47db24E08d0E7799E21E384901c4;
     bool public isClaimEnabled;
     uint256 nextPost;
 
