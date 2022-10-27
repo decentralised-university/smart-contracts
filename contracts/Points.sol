@@ -49,7 +49,7 @@ contract DUPoints is ERC20 {
         uint256 id
     );
 
-    function createPost(string memory _title, string memory _description) public {
+    function createPost(string memory _title, string memory _description) external {
 
         post storage newPost = Posts[nextPost];
         newPost.id = nextPost;
@@ -62,7 +62,7 @@ contract DUPoints is ERC20 {
         nextPost++;
     }
 
-    function voteOnPost(uint256 _id, bool _vote) public {
+    function voteOnPost(uint256 _id, bool _vote) external {
         require(Posts[_id].exists, "This Proposal does not exist");
         require(!Posts[_id].voteStatus[msg.sender], "You have already voted on this Proposal");
         require(Posts[_id].creator != msg.sender, "You cannot react to your own post!");
@@ -82,7 +82,7 @@ contract DUPoints is ERC20 {
     }
     
 
-    function claimPoints() external payable {
+    function claimPoints() external {
         require (IERC20(accessPass).balanceOf(msg.sender) > 0, 'You must own the DU Access Pass to claim your free tokens!');
         require(claimedWallets[msg.sender] < 1, 'You have already claimed your free 100 points!');
 
