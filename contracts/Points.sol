@@ -71,14 +71,14 @@ contract DUPoints is ERC20 {
 
         if(_vote) {
             p.votesUp++;
-            _mint(Posts[_id].creator, 10);
+            _mint(Posts[_id].creator, 10 * 10 ** decimals());
         }else{
             p.votesDown++;
         }
 
         p.voteStatus[msg.sender] = true;
         emit newVote(p.votesUp, p.votesDown, msg.sender, _id, _vote);
-        _totalSupply = _totalSupply + 10;
+        _totalSupply = _totalSupply + 10 * 10 ** decimals();
     }
     
 
@@ -87,7 +87,7 @@ contract DUPoints is ERC20 {
         require(claimedWallets[msg.sender] < 1, 'You have already claimed your free 100 points!');
 
         claimedWallets[msg.sender]++;
-        _totalSupply = _totalSupply + 100;
-        _mint(msg.sender, 100);
+        _totalSupply = _totalSupply + 100 * 10 ** decimals();
+        _mint(msg.sender, 100 * 10 ** decimals());
     }
 }
