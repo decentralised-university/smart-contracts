@@ -22,11 +22,9 @@ contract Dao {
         uint256 id;
         bool exists;
         string description;
-        uint deadline;
+        uint256 deadline;
         uint256 votesUp;
         uint256 votesDown;
-        // address[] canVote;
-        // uint256 maxVotes;
         mapping(address => bool) voteStatus;
         bool countConducted;
         bool passed;
@@ -37,8 +35,8 @@ contract Dao {
     event proposalCreated(
         uint256 id,
         string description,
-        // uint256 maxVotes,
-        address proposer
+        address proposer,
+        uint256 deadline
     );
 
     event newVote(
@@ -76,8 +74,19 @@ contract Dao {
         newProposal.deadline = block.number + 100;
         // newProposal.maxVotes = validTokens.length;
 
-        emit proposalCreated(nextProposal, _description, msg.sender);
+        emit proposalCreated(nextProposal, _description, msg.sender, newProposal.deadline);
         nextProposal++;
+    }
+
+    function getProposal(uint8 id) external view returns(bool, string memory, uint256, uint256, uint256, bool, bool) {
+
+        return (Proposals[id].exists, 
+                Proposals[id].description, 
+                Proposals[id].deadline, 
+                Proposals[id].votesUp, 
+                Proposals[id].votesDown, 
+                Proposals[id].countConducted, 
+                Proposals[id].passed) ;
     }
 
 
