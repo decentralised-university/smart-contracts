@@ -71,22 +71,21 @@ contract Dao {
         newProposal.id = nextProposal;
         newProposal.exists = true;
         newProposal.description = _description;
-        newProposal.deadline = block.number + 100;
-        // newProposal.maxVotes = validTokens.length;
+        newProposal.deadline = block.number + 200000; // two days ish
 
         emit proposalCreated(nextProposal, _description, msg.sender, newProposal.deadline);
         nextProposal++;
     }
 
-    function getProposal(uint8 id) external view returns(bool, string memory, uint256, uint256, uint256, bool, bool) {
+    function getProposal(uint8 _id) external view returns(string memory _description, uint256 _deadline, uint256 _votesUp, uint256 _votesDown, bool _countConducted, bool _passed) {
+        require(Proposals[_id].exists, "This Proposal does not exist");
 
-        return (Proposals[id].exists, 
-                Proposals[id].description, 
-                Proposals[id].deadline, 
-                Proposals[id].votesUp, 
-                Proposals[id].votesDown, 
-                Proposals[id].countConducted, 
-                Proposals[id].passed) ;
+        return (_description = Proposals[_id].description, 
+                _deadline = Proposals[_id].deadline, 
+                _votesUp = Proposals[_id].votesUp, 
+                _votesDown = Proposals[_id].votesDown, 
+                _countConducted = Proposals[_id].countConducted, 
+                _passed = Proposals[_id].passed) ;
     }
 
 
@@ -105,7 +104,7 @@ contract Dao {
         }
 
         p.voteStatus[msg.sender] = true;
-
+    
         emit newVote(p.votesUp, p.votesDown, msg.sender, _id, _vote);
     }
 
@@ -126,11 +125,4 @@ contract Dao {
         emit proposalCount(_id, p.passed);
     }
 
-
-    // function addTokenId(uint256 _tokenId) public {
-    //     require(msg.sender == owner, "Only Owner Can Add Tokens");
-
-    //     validTokens.push(_tokenId);
-    // }
-    
 }
