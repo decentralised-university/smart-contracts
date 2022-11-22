@@ -1,0 +1,8 @@
+{
+    "solidity-va.deco.statevars": true,
+    "solidity-va.outline.enable": true,
+    "solidity-va.outline.decorations": true,
+    "solidity-va.preview.markdown": true,
+    "solidity-va.preview.dot": true,
+    "solidity-va.uml.actors.enable": true
+}

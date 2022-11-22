@@ -1,28 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20Untradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract DUPoints is ERC20 {
-    // uint256 public s_maxSupply = 22000000 * 10 ** decimals(); // 22 million
-    mapping (address => uint) public claimedWallets;
+abstract contract DUPoints is ERC20Untradeable, Ownable {
+    mapping(address => uint) public claimedWallets;
     uint256 public _totalSupply;
-    uint256 public maxSupply;
     address public accessPass = 0x6d818827046A47db24E08d0E7799E21E384901c4;
     bool public isClaimEnabled;
-    uint256 nextPost;
+    uint256 nextPost; 
+    mapping(address => uint256) private _balances;
 
-    constructor() ERC20("DU Points", "DUP") {
-        // _mint(msg.sender, s_maxSupply);
+
+    constructor() ERC20Untradeable("DU Points", "DUP") {
         nextPost = 1;
     }
 
-    struct post{
+    struct post {
         uint256 id;
         bool exists;
         address creator;
         string title;
-        string description;
+        string description;         
         uint256 votesUp;
         uint256 votesDown;
         mapping(address => bool) voteStatus;
@@ -30,12 +31,7 @@ contract DUPoints is ERC20 {
 
     mapping(uint256 => post) public Posts;
 
-    event postCreated(
-        uint256 id,
-        string description,
-        // uint256 maxVotes,
-        address proposer
-    );
+    event postCreated(uint256 id, string description, address proposer);
 
     event newVote(
         uint256 votesUp,
@@ -45,12 +41,9 @@ contract DUPoints is ERC20 {
         bool votedFor
     );
 
-    event postCount(
-        uint256 id
-    );
-
-    function createPost(string memory _title, string memory _description) external {
-
+    function createPost(string memory _title, string memory _description)
+        external
+    {
         post storage newPost = Posts[nextPost];
         newPost.id = nextPost;
         newPost.exists = true;
@@ -64,30 +57,63 @@ contract DUPoints is ERC20 {
 
     function voteOnPost(uint256 _id, bool _vote) external {
         require(Posts[_id].exists, "This Proposal does not exist");
-        require(!Posts[_id].voteStatus[msg.sender], "You have already voted on this Proposal");
-        require(Posts[_id].creator != msg.sender, "You cannot react to your own post!");
+        require(
+            !Posts[_id].voteStatus[msg.sender],
+            "You have already voted on this Proposal"
+        );
+        require(
+            Posts[_id].creator != msg.sender,
+            "You cannot react to your own post!"
+        );
 
         post storage p = Posts[_id];
 
-        if(_vote) {
+        if (_vote) {
             p.votesUp++;
-            _mint(Posts[_id].creator, 10 * 10 ** decimals());
-        }else{
+            _mint(Posts[_id].creator, 10 * 10**decimals());
+        } else {
             p.votesDown++;
         }
 
         p.voteStatus[msg.sender] = true;
         emit newVote(p.votesUp, p.votesDown, msg.sender, _id, _vote);
-        _totalSupply = _totalSupply + 10 * 10 ** decimals();
+        _totalSupply = _totalSupply + 10 * 10**decimals();
     }
-    
 
     function claimPoints() external {
-        require (IERC20(accessPass).balanceOf(msg.sender) > 0, 'You must own the DU Access Pass to claim your free tokens!');
-        require(claimedWallets[msg.sender] < 1, 'You have already claimed your free 100 points!');
+        require(
+            IERC20(accessPass).balanceOf(msg.sender) > 0,
+            "You must own the DU Access Pass to claim your free tokens!"
+        );
+        require(
+            claimedWallets[msg.sender] < 1,
+            "You have already claimed your free 100 points!"
+        );
 
         claimedWallets[msg.sender]++;
-        _totalSupply = _totalSupply + 100 * 10 ** decimals();
-        _mint(msg.sender, 100 * 10 ** decimals());
+        _totalSupply = _totalSupply + 100 * 10**decimals();
+        _mint(msg.sender, 100 * 10**decimals());
+    }
+
+
+    function _burn(address account, uint256 amount) internal override {
+        require(account != address(0), "ERC20: burn from the zero address");
+
+        _beforeTokenTransfer(account, address(0), amount);
+
+        uint256 accountBalance = _balances[account];
+        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        unchecked {
+            _balances[account] = accountBalance - amount;
+        }
+        _totalSupply -= amount;
+
+        emit Transfer(account, address(0), amount);
+
+        _afterTokenTransfer(account, address(0), amount);
+    }
+
+    function burn(address account, uint256 amount) external onlyOwner {
+        _burn(account, amount);
     }
 }

@@ -15,7 +15,7 @@ contract Dao {
     constructor(){
         owner = msg.sender;
         nextProposal = 1;
-        daoContract = IdaoContract(0x6d818827046A47db24E08d0E7799E21E384901c4);
+        daoContract = IdaoContract(0x41f41C3BCBfB2b5AE57c39BD654109c8eD98872f);
     }
 
     struct proposal{
@@ -104,7 +104,7 @@ contract Dao {
         }
 
         p.voteStatus[msg.sender] = true;
-    
+
         emit newVote(p.votesUp, p.votesDown, msg.sender, _id, _vote);
     }
 

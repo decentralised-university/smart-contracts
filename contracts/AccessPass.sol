@@ -26,6 +26,10 @@ contract AccessPass is ERC721, Ownable {
         maxSupply = maxSupply_;
     } 
 
+    function setMintPrice(uint256 mintPrice_) external onlyOwner {
+        mintPrice = mintPrice_;
+    } 
+
     function mint() external payable {
         require(isMintEnabled, 'Minting is not currently enabled');
         require(mintedWallets[msg.sender] < 1, 'You already own 1 Access Pass! You cannot buy more than 1.');
